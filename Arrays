@@ -1,0 +1,72 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+contract ArraysExercise {
+    // State variables
+    uint[] numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Pre-initialized array of numbers
+    uint[] timestamps; // Array for storing timestamps
+    address[] senders; // Array for storing sender addresses
+
+    uint256 constant Y2K = 946702800; // Unix timestamp for the year 2000
+
+    // Get the array of numbers
+    function getNumbers() external view returns (uint[] memory) {
+        uint[] memory results = new uint[](numbers.length);
+        for (uint i = 0; i < numbers.length; i++) {
+            results[i] = numbers[i];
+        }
+        return results;
+    }
+
+    // Reset numbers array to initial values
+    function resetNumbers() public {
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    }
+
+    // Append new numbers to the array
+    function appendToNumbers(uint[] calldata _toAppend) public {
+        for (uint i = 0; i < _toAppend.length; i++) {
+            numbers.push(_toAppend[i]);
+        }
+    }
+
+    // Save a timestamp and sender address
+    function saveTimestamp(uint _unixTimestamp) public {
+        timestamps.push(_unixTimestamp);
+        senders.push(msg.sender);
+    }
+
+    // Get timestamps and senders after Y2K
+    function afterY2K() public view returns (uint256[] memory, address[] memory) {
+        uint256 count = 0;
+        for (uint i = 0; i < timestamps.length; i++) {
+            if (timestamps[i] > Y2K) {
+                count++;
+            }
+        }
+
+        uint256[] memory timestampsAfterY2K = new uint256[](count);
+        address[] memory sendersAfterY2K = new address[](count);
+        uint256 index = 0;
+
+        for (uint i = 0; i < timestamps.length; i++) {
+            if (timestamps[i] > Y2K) {
+                timestampsAfterY2K[index] = timestamps[i];
+                sendersAfterY2K[index] = senders[i];
+                index++;
+            }
+        }
+
+        return (timestampsAfterY2K, sendersAfterY2K);
+    }
+
+    // Reset the senders array
+    function resetSenders() public {
+        delete senders;
+    }
+
+    // Reset the timestamps array
+    function resetTimestamps() public {
+        delete timestamps;
+    }
+}
