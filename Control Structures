@@ -1,0 +1,38 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.17;
+
+contract ControlStructures {
+    // Custom errors for specific conditions
+    error AfterHours(uint256 time);
+    error AtLunch();
+
+    // FizzBuzz function with conditional checks
+    function fizzBuzz(uint256 _number) public pure returns (string memory response) {
+        if (_number % 3 == 0 && _number % 5 == 0) {
+            return "FizzBuzz"; // Divisible by both 3 and 5
+        } else if (_number % 3 == 0) {
+            return "Fizz"; // Divisible by 3
+        } else if (_number % 5 == 0) {
+            return "Buzz"; // Divisible by 5
+        } else {
+            return "Splat"; // Not divisible by 3 or 5
+        }
+    }
+
+    // Function to handle different times of the day
+    function doNotDisturb(uint256 _time) public pure returns (string memory result) {
+        assert(_time < 2400); // Ensure valid time format
+
+        if (_time > 2200 || _time < 800) {
+            revert AfterHours(_time); // Time is after hours
+        } else if (_time >= 1200 && _time <= 1299) {
+            revert AtLunch(); // Time is lunch break
+        } else if (_time >= 800 && _time <= 1199) {
+            return "Morning!"; // Morning hours
+        } else if (_time >= 1300 && _time <= 1799) {
+            return "Afternoon!"; // Afternoon hours
+        } else if (_time >= 1800 && _time <= 2200) {
+            return "Evening!"; // Evening hours
+        }
+    }
+}
